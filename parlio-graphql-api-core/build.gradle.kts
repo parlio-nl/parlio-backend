@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.plugin.spring)
-    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management)
 }
 
@@ -25,9 +25,11 @@ dependencies {
 configurations {
     "testCompileClasspath" {
         exclude(group = "junit", module = "junit")
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     "testRuntimeClasspath" {
         exclude(group = "junit", module = "junit")
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
 }
 
