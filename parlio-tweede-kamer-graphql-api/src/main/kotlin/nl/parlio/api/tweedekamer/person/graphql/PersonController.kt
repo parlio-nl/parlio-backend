@@ -8,6 +8,7 @@ import com.netflix.graphql.dgs.InputArgument
 import graphql.relay.Connection
 import graphql.relay.DefaultConnection
 import graphql.relay.DefaultPageInfo
+import java.util.concurrent.CompletableFuture
 import nl.parlio.api.core.ext.getMappedBatchLoader
 import nl.parlio.api.core.relay.Relay
 import nl.parlio.api.tweedekamer.person.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
@@ -19,7 +20,6 @@ import nl.parlio.tweedekamer.gen.graphql.types.ChangeEvent
 import nl.parlio.tweedekamer.gen.graphql.types.Person
 import nl.parlio.tweedekamer.gen.graphql.types.PersonChangeEvent
 import org.dataloader.Try
-import java.util.concurrent.CompletableFuture
 
 @DgsComponent
 class PersonController {

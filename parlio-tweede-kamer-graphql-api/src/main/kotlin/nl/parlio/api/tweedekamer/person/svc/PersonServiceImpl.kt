@@ -31,7 +31,8 @@ class PersonServiceImpl(
                     PERSON.SLUG,
                     PERSON.FAMILY_NAME,
                     PERSON.NAME_INITIALS,
-                    PERSON.FIRST_NAME)
+                    PERSON.FIRST_NAME
+                )
                 .from(PERSON)
                 .where(PERSON.PERSON_ID.`in`(ids))
                 .fetchInto(PERSON)
@@ -48,7 +49,8 @@ class PersonServiceImpl(
                     CHANGE_EVENT.CHANGE_EVENT_ID,
                     CHANGE_EVENT.OPERATION_NAME,
                     CHANGE_EVENT.MODEL,
-                    CHANGE_EVENT.REF)
+                    CHANGE_EVENT.REF
+                )
                 .from(CHANGE_EVENT)
                 .where(CHANGE_EVENT.MODEL.eq("Person").and(CHANGE_EVENT.REF.`in`(personIds)))
                 .fetchGroups(CHANGE_EVENT.REF, CHANGE_EVENT.recordType)
@@ -70,7 +72,8 @@ class PersonServiceImpl(
             dsl.select(
                     CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID,
                     CHANGE_EVENT_ENTRY.KEY,
-                    CHANGE_EVENT_ENTRY.DATA)
+                    CHANGE_EVENT_ENTRY.DATA
+                )
                 .from(CHANGE_EVENT_ENTRY)
                 .where(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID.`in`(changeEventIds))
                 .fetchGroups(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID, CHANGE_EVENT_ENTRY.recordType)
@@ -92,7 +95,10 @@ class PersonServiceImpl(
             when (t.textValue()) {
                 "s" ->
                     StringChangeEntryDto(
-                        dataTree.get("b").textValue(), dataTree.get("a").textValue(), key)
+                        dataTree.get("b").textValue(),
+                        dataTree.get("a").textValue(),
+                        key
+                    )
                 else -> TODO()
             }
         return entry

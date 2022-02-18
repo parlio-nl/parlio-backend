@@ -38,7 +38,7 @@ subprojects {
                 target("/**/src/**/*.java")
             }
             kotlin {
-                ktfmt(libs.versions.ktfmt.get()).dropboxStyle()
+                ktfmt(libs.versions.ktfmt.get()).kotlinlangStyle()
                 target("/**/src/**/*.kt")
             }
         }

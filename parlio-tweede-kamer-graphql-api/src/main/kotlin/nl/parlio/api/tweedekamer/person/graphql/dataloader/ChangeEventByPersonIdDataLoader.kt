@@ -1,8 +1,6 @@
 package nl.parlio.api.tweedekamer.person.graphql.dataloader
 
 import com.netflix.graphql.dgs.DgsDataLoader
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletionStage
 import nl.parlio.api.core.ext.fillMissingKeys
 import nl.parlio.api.core.relay.Relay
 import nl.parlio.api.tweedekamer.person.dto.PersonChangeEventDto
@@ -12,6 +10,8 @@ import nl.parlio.tweedekamer.gen.graphql.types.ChangeEvent
 import nl.parlio.tweedekamer.gen.graphql.types.Person
 import nl.parlio.tweedekamer.gen.graphql.types.PersonSyncFeedUpdateEvent
 import org.dataloader.MappedBatchLoader
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 
 @DgsDataLoader(name = "ChangeEventByPersonIdDataLoader")
 class ChangeEventByPersonIdDataLoader(private val personService: PersonService) :
@@ -31,7 +31,8 @@ class ChangeEventByPersonIdDataLoader(private val personService: PersonService) 
                 Relay.toGlobalId("ChangeEvent", left.id),
                 Person.newBuilder().id(Relay.toGlobalId("Person", left.personId)).build(),
                 left.op,
-                null)
+                null
+            )
         }
         TODO()
     }
