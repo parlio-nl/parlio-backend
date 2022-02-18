@@ -43,6 +43,7 @@ dependencies {
 }
 
 tasks.withType<Test> {
+    jvmArgs = listOf("-Dorg.jooq.no-logo=true")
     useJUnitPlatform()
 }
 
@@ -96,8 +97,13 @@ jooq {
                         isDeprecated = false
                         isRecords = true
                         isPojos = false
-                        isImmutablePojos = true
-                        isFluentSetters = true
+                        isImmutablePojos = false
+                        isComments = false
+                        isIndexes = false
+                        isGlobalCatalogReferences = false
+                        isGlobalSchemaReferences = false
+                        isKeys = false
+                        isFluentSetters = false
                         isGlobalTableReferences = false
                     }
                     target.apply {
@@ -113,5 +119,9 @@ jooq {
 
 val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
     enabled = System.getProperty("CI") != null
+    inputs.files(fileTree("src/main/resources/db/migration/postgresql"),
+        fileTree("src/main/jooq"), file("**/build.gradle.kts"))
+        .withPropertyName("migrations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     allInputsDeclared.set(true)
 }
