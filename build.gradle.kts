@@ -31,11 +31,11 @@ subprojects {
             }
         }
     }
-    pluginManager.withPlugin("diffplug.spotless") {
+    pluginManager.withPlugin("com.diffplug.spotless") {
         configure<com.diffplug.gradle.spotless.SpotlessExtension>() {
             java {
                 googleJavaFormat(libs.versions.google.java.format.get())
-                target("/*/src/**/*.java")
+                target("/**/src/**/*.java")
             }
         }
     }
@@ -56,5 +56,5 @@ val vmImplementation: JvmImplementation = when (toolchainVm) {
 }
 
 task("printUsedVersions") {
-    println("Java versions: (compile: ${compileVersion}), (test: ${testVersion}), (javadoc: ${javadocVersion})")
+    println("Java versions: (compile: ${compileVersion}) | (test: ${testVersion}) | (javadoc: ${javadocVersion})")
 }

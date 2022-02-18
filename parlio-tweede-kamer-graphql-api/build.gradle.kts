@@ -125,3 +125,9 @@ val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
         .withPathSensitivity(PathSensitivity.RELATIVE)
     allInputsDeclared.set(true)
 }
+
+spotless {
+    java {
+        targetExclude("/src/main/jooq/")
+    }
+}

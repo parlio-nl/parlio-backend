@@ -1,5 +1,6 @@
 package nl.parlio.api.core.relay;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -81,13 +82,13 @@ public class RelayUtilTests {
         .satisfies(
             $ ->
                 assertThat($)
-                    .extracting(GlobalId::type, InstanceOfAssertFactories.STRING)
+                    .extracting(GlobalId::type, as(InstanceOfAssertFactories.STRING))
                     .isNotNull()
                     .isEqualTo(expectedType))
         .satisfies(
             $ ->
                 assertThat($)
-                    .extracting(GlobalId::id, InstanceOfAssertFactories.LONG)
+                    .extracting(GlobalId::id, as(InstanceOfAssertFactories.LONG))
                     .isEqualTo(expectedId));
   }
 }
