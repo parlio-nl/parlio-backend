@@ -102,11 +102,16 @@ jooq {
                     }
                     target.apply {
                         packageName = "nl.parlio.tweedekamer.gen.jooq"
-                        directory = "src/main/jooq/"  // default (can be omitted)
+                        directory = "src/main/jooq/"
                     }
                     strategy.name = "nl.parlio.ext.jooq.codegen.QPrefixGeneratorStrategy"
                 }
             }
         }
     }
+}
+
+val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
+    enabled = System.getProperty("CI") != null
+    allInputsDeclared.set(true)
 }
