@@ -30,7 +30,10 @@ class PersonController {
     }
 
     @DgsQuery
-    fun rawPerson(@InputArgument rawId: String, dfe: DgsDataFetchingEnvironment): CompletableFuture<Try<Person>> {
+    fun rawPerson(
+        @InputArgument rawId: String,
+        dfe: DgsDataFetchingEnvironment
+    ): CompletableFuture<Try<Person>> {
         val dl = dfe.getMappedBatchLoader<Long, Try<Person>, PersonByIdDataLoader>()
         return dl.load(rawId.toLong())
     }
@@ -39,7 +42,8 @@ class PersonController {
     fun changeHistory(dfe: DgsDataFetchingEnvironment): CompletableFuture<List<ChangeEvent>> {
         val parentGlobalId = dfe.getSource<Person>().id
         val personId = Relay.assertAndExtractId(parentGlobalId, "User")
-        val dl = dfe.getMappedBatchLoader<Long, List<ChangeEvent>, ChangeEventByPersonIdDataLoader>()
+        val dl =
+            dfe.getMappedBatchLoader<Long, List<ChangeEvent>, ChangeEventByPersonIdDataLoader>()
         return dl.load(personId)
     }
 
@@ -47,7 +51,9 @@ class PersonController {
     fun log(dfe: DgsDataFetchingEnvironment): CompletableFuture<List<ChangeEntry>> {
         val parentGlobalId = dfe.getSource<ChangeEvent>().id
         val id = Relay.assertAndExtractId(parentGlobalId, "ChangeEvent")
-        val dl = dfe.getMappedBatchLoader<Long, List<ChangeEntry>, ChangeEntryByChangeEventIdDataLoader>()
+        val dl =
+            dfe.getMappedBatchLoader<
+                Long, List<ChangeEntry>, ChangeEntryByChangeEventIdDataLoader>()
         return dl.load(id)
     }
 
@@ -58,6 +64,4 @@ class PersonController {
         val dl = dfe.getMappedBatchLoader<Long, Try<Person>, PersonByIdDataLoader>()
         return dl.load(personId)
     }
-
-
 }

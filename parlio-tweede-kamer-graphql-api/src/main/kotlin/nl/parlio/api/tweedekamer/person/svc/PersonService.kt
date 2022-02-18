@@ -11,5 +11,4 @@ interface PersonService {
     fun findMultipleChangeHistory(personIds: Set<Long>): Map<Long, List<PersonChangeEventDto>>
 
     fun findChangeLog(changeEventIds: Set<Long>): Map<Long, List<ChangeEntryDto>>
-
 }

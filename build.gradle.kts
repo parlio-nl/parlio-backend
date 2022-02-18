@@ -37,6 +37,10 @@ subprojects {
                 googleJavaFormat(libs.versions.google.java.format.get())
                 target("/**/src/**/*.java")
             }
+            kotlin {
+                ktfmt(libs.versions.ktfmt.get()).dropboxStyle()
+                target("/**/src/**/*.kt")
+            }
         }
     }
 }

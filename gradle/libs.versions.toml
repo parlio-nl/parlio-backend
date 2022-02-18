@@ -1,13 +1,14 @@
 [versions]
 dgs-codegen = "5.1.16"
 dgs-framework = "4.9.16"
-diffplug-spotless = "6.2.1"
+diffplug-spotless = "6.3.0"
 findbugs-jsr305 = "3.0.2"
 flyway = "8.4.4"
 google-java-format = "1.13.0"
 jfrunit = "1.0.0.Alpha2"
 jooq-codegen = "7.1"
 kotlin = "1.6.10"
+ktfmt = "0.32"
 mapstruct = "1.5.0.Beta2"
 mapstruct-spring-extension = "0.1.0"
 spring-boot = "2.6.3"
@@ -26,6 +27,7 @@ jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-
 jfrunit-core = { module = "org.moditect.jfrunit:jfrunit-core", version.ref = "jfrunit" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 mapstruct-spring-annotations = { module = "org.mapstruct.extensions.spring:mapstruct-spring-annotations", version.ref = "mapstruct-spring-extension" }

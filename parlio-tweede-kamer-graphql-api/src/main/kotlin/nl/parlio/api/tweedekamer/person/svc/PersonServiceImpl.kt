@@ -2,8 +2,8 @@ package nl.parlio.api.tweedekamer.person.svc
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import nl.parlio.api.tweedekamer.person.PersonChangeOperation
-import nl.parlio.api.tweedekamer.person.dto.PersonDto
 import nl.parlio.api.tweedekamer.person.dto.PersonChangeEventDto
+import nl.parlio.api.tweedekamer.person.dto.PersonDto
 import nl.parlio.api.tweedekamer.person.dto.PersonSyncFeedUpdateDto
 import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryDto
 import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryKeyDto
@@ -25,29 +25,37 @@ class PersonServiceImpl(
 ) : PersonService {
 
     override fun findPeople(ids: Set<Long>): Map<Long, PersonDto> {
-        val people = dsl
-            .select(PERSON.PERSON_ID, PERSON.SLUG, PERSON.FAMILY_NAME, PERSON.NAME_INITIALS, PERSON.FIRST_NAME)
-            .from(PERSON)
-            .where(PERSON.PERSON_ID.`in`(ids))
-            .fetchInto(PERSON)
+        val people =
+            dsl.select(
+                    PERSON.PERSON_ID,
+                    PERSON.SLUG,
+                    PERSON.FAMILY_NAME,
+                    PERSON.NAME_INITIALS,
+                    PERSON.FIRST_NAME)
+                .from(PERSON)
+                .where(PERSON.PERSON_ID.`in`(ids))
+                .fetchInto(PERSON)
         return people
             .mapNotNull { conversionService.convert(it, PersonDto::class.java) }
             .associateBy { it.id }
     }
 
-    override fun findMultipleChangeHistory(personIds: Set<Long>): Map<Long, List<PersonChangeEventDto>> {
-        val events: Map<Long, List<QChangeEventRecord>> = dsl
-            .select(CHANGE_EVENT.CHANGE_EVENT_ID, CHANGE_EVENT.OPERATION_NAME, CHANGE_EVENT.MODEL, CHANGE_EVENT.REF)
-            .from(CHANGE_EVENT)
-            .where(
-                CHANGE_EVENT.MODEL.eq("Person").and(
-                    CHANGE_EVENT.REF.`in`(personIds)
-                )
-            )
-            .fetchGroups(CHANGE_EVENT.REF, CHANGE_EVENT.recordType)
+    override fun findMultipleChangeHistory(
+        personIds: Set<Long>
+    ): Map<Long, List<PersonChangeEventDto>> {
+        val events: Map<Long, List<QChangeEventRecord>> =
+            dsl.select(
+                    CHANGE_EVENT.CHANGE_EVENT_ID,
+                    CHANGE_EVENT.OPERATION_NAME,
+                    CHANGE_EVENT.MODEL,
+                    CHANGE_EVENT.REF)
+                .from(CHANGE_EVENT)
+                .where(CHANGE_EVENT.MODEL.eq("Person").and(CHANGE_EVENT.REF.`in`(personIds)))
+                .fetchGroups(CHANGE_EVENT.REF, CHANGE_EVENT.recordType)
 
-        return events
-            .mapValues { (personId, events) -> events.map { event -> mapChangeEvent(personId, event) } }
+        return events.mapValues { (personId, events) ->
+            events.map { event -> mapChangeEvent(personId, event) }
+        }
     }
 
     fun mapChangeEvent(personId: Long, event: QChangeEventRecord): PersonChangeEventDto {
@@ -58,19 +66,16 @@ class PersonServiceImpl(
     }
 
     override fun findChangeLog(changeEventIds: Set<Long>): Map<Long, List<ChangeEntryDto>> {
-        val events: Map<Long, List<QChangeEventEntryRecord>> = dsl
-            .select(
-                CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID, CHANGE_EVENT_ENTRY.KEY, CHANGE_EVENT_ENTRY.DATA
-            )
-            .from(CHANGE_EVENT_ENTRY)
-            .where(
-                CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID.`in`(changeEventIds)
-            )
-            .fetchGroups(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID, CHANGE_EVENT_ENTRY.recordType)
+        val events: Map<Long, List<QChangeEventEntryRecord>> =
+            dsl.select(
+                    CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID,
+                    CHANGE_EVENT_ENTRY.KEY,
+                    CHANGE_EVENT_ENTRY.DATA)
+                .from(CHANGE_EVENT_ENTRY)
+                .where(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID.`in`(changeEventIds))
+                .fetchGroups(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID, CHANGE_EVENT_ENTRY.recordType)
 
-        return events
-            .mapValues { (_, changeEntries) -> changeEntries.map(::mapChangeEntry) }
-
+        return events.mapValues { (_, changeEntries) -> changeEntries.map(::mapChangeEntry) }
     }
 
     fun mapChangeEntry(eventEntry: QChangeEventEntryRecord): ChangeEntryDto {
@@ -83,11 +88,13 @@ class PersonServiceImpl(
             TODO("Incorrect t: $dataTree")
         }
 
-        val entry: ChangeEntryDto = when (t.textValue()) {
-            "s" -> StringChangeEntryDto(dataTree.get("b").textValue(), dataTree.get("a").textValue(), key)
-            else -> TODO()
-        }
+        val entry: ChangeEntryDto =
+            when (t.textValue()) {
+                "s" ->
+                    StringChangeEntryDto(
+                        dataTree.get("b").textValue(), dataTree.get("a").textValue(), key)
+                else -> TODO()
+            }
         return entry
     }
-
 }

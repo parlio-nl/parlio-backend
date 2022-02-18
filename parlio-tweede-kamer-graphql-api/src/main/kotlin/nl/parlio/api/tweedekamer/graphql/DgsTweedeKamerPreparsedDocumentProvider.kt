@@ -12,11 +12,8 @@ import java.util.function.Function
 @DgsComponent
 class DgsTweedeKamerPreparsedDocumentProvider : PreparsedDocumentProvider {
 
-    private val cache: Cache<String, PreparsedDocumentEntry> = Caffeine
-        .newBuilder()
-        .maximumSize(2500)
-        .expireAfterAccess(Duration.ofHours(1))
-        .build()
+    private val cache: Cache<String, PreparsedDocumentEntry> =
+        Caffeine.newBuilder().maximumSize(2500).expireAfterAccess(Duration.ofHours(1)).build()
 
     override fun getDocument(
         executionInput: ExecutionInput,
