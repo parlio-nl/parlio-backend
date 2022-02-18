@@ -2,7 +2,7 @@ name: Verify
 on:
   pull_request:
     branches:
-      - $default-branch
+      - main
 jobs:
   buildAndTest:
     name: buildAndTest ${{ matrix.java.c }}/${{ matrix.java.t || matrix.java.c }} (${{ matrix.dist.vm }}) on ${{ matrix.os }}
