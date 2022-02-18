@@ -15,7 +15,7 @@ allprojects {
 
 subprojects {
     pluginManager.withPlugin("java") {
-        configure<JavaPluginExtension>() {
+        configure<JavaPluginExtension> {
             toolchain {
                 languageVersion.set(JavaLanguageVersion.of(17))
             }
@@ -32,7 +32,7 @@ subprojects {
         }
     }
     pluginManager.withPlugin("com.diffplug.spotless") {
-        configure<com.diffplug.gradle.spotless.SpotlessExtension>() {
+        configure<com.diffplug.gradle.spotless.SpotlessExtension> {
             java {
                 googleJavaFormat(libs.versions.google.java.format.get())
                 target("/**/src/**/*.java")

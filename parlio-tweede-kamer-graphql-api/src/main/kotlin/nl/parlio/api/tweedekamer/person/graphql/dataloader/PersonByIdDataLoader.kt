@@ -1,7 +1,7 @@
 package nl.parlio.api.tweedekamer.person.graphql.dataloader
 
 import com.netflix.graphql.dgs.DgsDataLoader
-import nl.parlio.api.tweedekamer.DataLoaderUtils.fillMissingKeys
+import nl.parlio.api.core.ext.fillMissingKeys
 import nl.parlio.api.tweedekamer.person.svc.PersonService
 import nl.parlio.tweedekamer.gen.graphql.types.Person
 import org.dataloader.MappedBatchLoader

@@ -13,8 +13,7 @@ import org.springframework.core.convert.converter.Converter;
 public interface QLChangeEntryMapper extends Converter<ChangeEntryDto, ChangeEntry> {
 
   default ChangeEntry convert(ChangeEntryDto entry) {
-    if (entry instanceof StringChangeEntryDto) {
-      StringChangeEntryDto s = (StringChangeEntryDto) entry;
+    if (entry instanceof StringChangeEntryDto s) {
       return convertS(s);
     }
     return null;

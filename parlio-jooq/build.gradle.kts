@@ -10,6 +10,7 @@ group = "nl.parlio.jooq"
 
 dependencies {
     val jooqVersion = dependencyManagement.importedProperties["jooq.version"]
+    @Suppress("GradlePackageUpdate")
     implementation("org.jooq:jooq-codegen:$jooqVersion")
 }
 
