@@ -5,6 +5,7 @@ diffplug-spotless = "6.2.1"
 findbugs-jsr305 = "3.0.2"
 flyway = "8.4.4"
 google-java-format = "1.13.0"
+jfrunit = "1.0.0.Alpha2"
 jooq-codegen = "7.1"
 kotlin = "1.6.10"
 mapstruct = "1.5.0.Beta2"
@@ -12,7 +13,6 @@ mapstruct-spring-extension = "0.1.0"
 spring-boot = "2.6.3"
 spring-dependency-management = "1.0.11.RELEASE"
 testcontainers = "1.16.2"
-jfrunit = "1.0.0.Alpha2"
 
 [libraries]
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
