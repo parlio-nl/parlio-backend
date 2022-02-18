@@ -1,0 +1,51 @@
+[versions]
+dgs-codegen = "5.1.16"
+dgs-framework = "4.9.16"
+diffplug-spotless = "6.2.1"
+findbugs-jsr305 = "3.0.2"
+flyway = "8.4.4"
+google-java-format = "1.13.0"
+jooq-codegen = "7.1"
+kotlin = "1.6.10"
+mapstruct = "1.5.0.Beta2"
+mapstruct-spring-extension = "0.1.0"
+spring-boot = "2.6.3"
+spring-dependency-management = "1.0.11.RELEASE"
+testcontainers = "1.16.2"
+jfrunit = "1.0.0.Alpha2"
+
+[libraries]
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine" }
+dgs-bom = { module = "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies", version.ref = "dgs-framework" }
+dgs-pagination = { module = "com.netflix.graphql.dgs:graphql-dgs-pagination" }
+dgs-spring-boot-starter = { module = "com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter" }
+findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs-jsr305" }
+flyway-core = { module = "org.flywaydb:flyway-core" }
+google-java-format = { module = "com.google.googlejavaformat:google-java-format", version.ref = "google-java-format" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+jfrunit-core = { module = "org.moditect.jfrunit:jfrunit-core", version.ref = "jfrunit" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+mapstruct-spring-annotations = { module = "org.mapstruct.extensions.spring:mapstruct-spring-annotations", version.ref = "mapstruct-spring-extension" }
+mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstruct-spring-extensions", version.ref = "mapstruct-spring-extension" }
+postgresql-driver = { module = "org.postgresql:postgresql" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
+spring-boot-starter-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter" }
+testcontainers-postgresql = { module = "org.testcontainers:junit-jupiter" }
+
+[plugins]
+dgs-codegen = { id = "com.netflix.dgs.codegen", version.ref = "dgs-codegen" }
+diffplug-spotless = { id = "com.diffplug.spotless", version.ref = "diffplug-spotless" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+jooq-codegen = { id = "nu.studer.jooq", version.ref = "jooq-codegen" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
