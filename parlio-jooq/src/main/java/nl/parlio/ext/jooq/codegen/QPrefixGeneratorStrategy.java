@@ -11,4 +11,5 @@ public class QPrefixGeneratorStrategy extends org.jooq.codegen.DefaultGeneratorS
     }
     return "Q" + super.getJavaClassName(definition, mode);
   }
+
 }
