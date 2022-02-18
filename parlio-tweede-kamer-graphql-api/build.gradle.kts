@@ -102,7 +102,7 @@ jooq {
                     }
                     target.apply {
                         packageName = "nl.parlio.tweedekamer.gen.jooq"
-                        directory = "build/generated-src/jooq/main"  // default (can be omitted)
+                        directory = "src/main/jooq/"  // default (can be omitted)
                     }
                     strategy.name = "nl.parlio.ext.jooq.codegen.QPrefixGeneratorStrategy"
                 }
