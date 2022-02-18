@@ -1,0 +1,17 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: 'parliopg'
+      POSTGRES_PASSWORD: 'parlioww'
+      POSTGRES_DB: 'parlio-dev-3'
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgres:/var/lib/postgresql"
+volumes:
+  postgres:

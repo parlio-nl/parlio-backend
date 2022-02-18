@@ -1,0 +1,68 @@
+type Query {
+    echo(msg: String!): String!
+    people(after: String, before: String, first: Int, last: Int): PersonConnection!
+    allPeople: PersonConnection! @deprecated
+    rawPerson(rawId: String!): Person
+}
+
+interface Node {
+    id: ID!
+}
+
+enum ChangeEntryKey {
+    PERSON_SLUG
+    PERSON_FIRST_NAME
+    PERSON_FAMILY_NAME
+    PERSON_INITIALS
+    PERSON_DATE_OF_BIRTH
+}
+
+interface ChangeEntry {
+    key: ChangeEntryKey!
+}
+
+type StringChangeEntry implements ChangeEntry {
+    key: ChangeEntryKey!
+    oldValue: String
+    newValue: String
+}
+
+interface ChangeEvent implements Node {
+    id: ID!
+    """
+    Operation identifier for this event type.
+    I.e: test.my_test1, super_cool.ingest_event, person.change.name
+    The identifier MUST match the following regular expression:
+    ^[A-Za-z0-9](?:[A-Za-z0-9]|[A-Za-z0-9_][A-Za-z0-9])*(?:\.[A-Za-z0-9](?:[A-Za-z0-9]|[A-Za-z0-9_][A-Za-z0-9])*)* (DOLLAR SIGN)
+    """
+    op: String!
+    log: [ChangeEntry!]!
+}
+
+type Person implements Node @connection {
+    id: ID!
+    slug: String!
+    firstName: String!
+    familyName: String!
+    nameInitials: String!
+    #    dateOfBirth: String!
+    changeHistory: [PersonChangeEvent!]!
+}
+
+interface PersonChangeEvent implements ChangeEvent & Node {
+    id: ID!
+    person: Person!
+    op: String!
+    log: [ChangeEntry!]!
+}
+
+type PersonSyncFeedUpdateEvent implements PersonChangeEvent & ChangeEvent & Node {
+    id: ID!
+    person: Person!
+    op: String!
+    log: [ChangeEntry!]!
+}
+
+type PoliticalParty implements Node @connection {
+    id: ID!
+}

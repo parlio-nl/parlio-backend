@@ -1,0 +1,11 @@
+/.idea/
+
+/.gradle/
+/*/build/
+/build/
+
+!/parlio-tweede-kamer-graphql-api/build/
+/parlio-tweede-kamer-graphql-api/build/*
+!/parlio-tweede-kamer-graphql-api/build/generated/
+/parlio-tweede-kamer-graphql-api/build/generated/*
+!/parlio-tweede-kamer-graphql-api/build/generated/jooq/
