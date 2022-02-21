@@ -54,7 +54,7 @@ type Person implements Node @connection {
     firstName: String!
     familyName: String!
     nameInitials: String!
-    changeHistory: [PersonChangeEvent!]!
+    changeHistory: [ChangeEvent!]!
     gifts(after: String, before: String, first: Int, last: Int): PersonGiftConnection!
     trips(after: String, before: String, first: Int, last: Int): PersonTripConnection!
 }
@@ -81,6 +81,13 @@ type PersonGift implements Node @connection {
     id: ID!
     description: String
     date: Date
+    changeHistory: [ChangeEvent!]!
+}
+
+type GenericChangeEvent implements ChangeEvent & Node {
+    id: ID!
+    op: String!
+    log: [ChangeEntry!]!
 }
 
 type PersonTrip implements Node @connection {
@@ -90,4 +97,5 @@ type PersonTrip implements Node @connection {
     paidBy: String
     purpose: String
     startDate: Date
+    changeHistory: [ChangeEvent!]!
 }

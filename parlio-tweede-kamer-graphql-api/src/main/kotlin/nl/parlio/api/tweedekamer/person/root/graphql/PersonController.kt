@@ -11,8 +11,10 @@ import nl.parlio.api.core.ext.convertExact
 import nl.parlio.api.core.ext.getMappedBatchLoader
 import nl.parlio.api.core.relay.Relay
 import nl.parlio.api.core.relay.connection.RelayConnection
-import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
-import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.ChangeEventByPersonIdDataLoader
+import nl.parlio.api.tweedekamer.audit.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
+import nl.parlio.api.tweedekamer.audit.graphql.dataloader.ChangeEventBySearchCompositeDataLoader
+import nl.parlio.api.tweedekamer.audit.types.ChangeEventModel
+import nl.parlio.api.tweedekamer.audit.types.ChangeEventSearchComposite
 import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.PersonByIdDataLoader
 import nl.parlio.api.tweedekamer.person.root.svc.PersonService
 import nl.parlio.tweedekamer.gen.graphql.DgsConstants
@@ -57,8 +59,11 @@ class PersonController(
         val parentGlobalId = dfe.getSource<Person>().id
         val personId = Relay.assertAndExtractId(parentGlobalId, "User")
         val dl =
-            dfe.getMappedBatchLoader<Long, List<ChangeEvent>, ChangeEventByPersonIdDataLoader>()
-        return dl.load(personId)
+            dfe.getMappedBatchLoader<
+                ChangeEventSearchComposite<Long>,
+                List<ChangeEvent>,
+                ChangeEventBySearchCompositeDataLoader>()
+        return dl.load(ChangeEventSearchComposite(ChangeEventModel.PERSON, personId))
     }
 
     @DgsData(parentType = DgsConstants.CHANGEEVENT.TYPE_NAME)
