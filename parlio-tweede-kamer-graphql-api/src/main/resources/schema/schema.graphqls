@@ -5,6 +5,16 @@ type Query {
     rawPerson(rawId: String!): Person
 }
 
+"""
+Date in yyyy-MM-dd (2015-01-21) format
+"""
+scalar Date
+
+"""
+Supplied by [`graphql-dgs-pagination`](https://netflix.github.io/dgs/advanced/relay-pagination/)
+"""
+directive @connection on OBJECT
+
 interface Node {
     id: ID!
 }
