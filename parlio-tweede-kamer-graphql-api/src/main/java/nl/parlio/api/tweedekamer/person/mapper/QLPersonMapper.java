@@ -11,6 +11,8 @@ import org.springframework.core.convert.converter.Converter;
 public interface QLPersonMapper extends Converter<PersonDto, Person> {
 
   @Mapping(target = "changeHistory", ignore = true)
+  @Mapping(target = "gifts", ignore = true)
+  @Mapping(target = "trips", ignore = true)
   @Mapping(
       target = "id",
       expression = "java(nl.parlio.api.core.relay.Relay.toGlobalId(\"User\", s.getId()))")

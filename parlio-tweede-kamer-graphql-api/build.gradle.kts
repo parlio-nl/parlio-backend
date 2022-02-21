@@ -58,6 +58,10 @@ tasks {
         language = "java"
 //        generateInterfaces = false // Node.id requires null (String in Kotlin), even if `kotlinAllFieldsOptional = true`
         packageName = "nl.parlio.tweedekamer.gen.graphql"
+        typeMapping = mutableMapOf(
+            "PersonGiftConnection" to "graphql.relay.Connection<PersonGift>",
+            "PersonTripConnection" to "graphql.relay.Connection<PersonTrip>"
+        )
     }
 
     bootRun {

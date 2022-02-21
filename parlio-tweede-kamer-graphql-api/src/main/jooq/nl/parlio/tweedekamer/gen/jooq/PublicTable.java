@@ -12,6 +12,7 @@ import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.FlywaySchemaHistoryTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.PersonGiftTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.PersonTable;
+import nl.parlio.tweedekamer.gen.jooq.tables.PersonTripTable;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
@@ -50,6 +51,8 @@ public class PublicTable extends SchemaImpl {
             ChangeEventTable.CHANGE_EVENT,
             ChangeEventEntryTable.CHANGE_EVENT_ENTRY,
             FlywaySchemaHistoryTable.FLYWAY_SCHEMA_HISTORY,
-            PersonTable.PERSON);
+            PersonTable.PERSON,
+            PersonGiftTable.PERSON_GIFT,
+            PersonTripTable.PERSON_TRIP);
     }
 }
