@@ -1,10 +1,12 @@
-package nl.parlio.api.tweedekamer.person.graphql.dataloader
+package nl.parlio.api.tweedekamer.person.root.graphql.dataloader
 
 import com.netflix.graphql.dgs.DgsDataLoader
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionStage
+import nl.parlio.api.core.ext.convertList
 import nl.parlio.api.core.ext.fillMissingKeys
-import nl.parlio.api.tweedekamer.person.svc.PersonService
+import nl.parlio.api.tweedekamer.audit.dto.ChangeEntryDto
+import nl.parlio.api.tweedekamer.person.root.svc.PersonService
 import nl.parlio.tweedekamer.gen.graphql.types.ChangeEntry
 import org.dataloader.MappedBatchLoader
 import org.springframework.core.convert.ConversionService
@@ -19,9 +21,7 @@ class ChangeEntryByChangeEventIdDataLoader(
             personService
                 .findChangeLog(keys)
                 .mapValues { (_, entries) ->
-                    entries.mapNotNull { entry ->
-                        conversionService.convert(entry, ChangeEntry::class.java)
-                    }
+                    conversionService.convertList<ChangeEntryDto, ChangeEntry>(entries)
                 }
                 .fillMissingKeys(keys) { emptyList() }
         }

@@ -1,7 +1,7 @@
 package nl.parlio.api.tweedekamer.person.mapper;
 
-import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryDto;
-import nl.parlio.api.tweedekamer.shared.types.changes.StringChangeEntryDto;
+import nl.parlio.api.tweedekamer.audit.dto.ChangeEntryDto;
+import nl.parlio.api.tweedekamer.audit.dto.StringChangeEntryDto;
 import nl.parlio.tweedekamer.gen.graphql.types.ChangeEntry;
 import nl.parlio.tweedekamer.gen.graphql.types.StringChangeEntry;
 import org.mapstruct.Mapper;

@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.person.dto
+package nl.parlio.api.tweedekamer.person.root.dto
 
 import nl.parlio.api.tweedekamer.person.PersonChangeOperation
 

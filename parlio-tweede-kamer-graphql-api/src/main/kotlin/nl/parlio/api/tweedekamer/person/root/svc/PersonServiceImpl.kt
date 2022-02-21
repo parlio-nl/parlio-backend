@@ -1,13 +1,12 @@
-package nl.parlio.api.tweedekamer.person.svc
+package nl.parlio.api.tweedekamer.person.root.svc
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import nl.parlio.api.core.ext.convertList
+import nl.parlio.api.tweedekamer.audit.ChangeEventFactory
+import nl.parlio.api.tweedekamer.audit.dto.ChangeEntryDto
 import nl.parlio.api.tweedekamer.person.PersonChangeOperation
-import nl.parlio.api.tweedekamer.person.dto.PersonChangeEventDto
-import nl.parlio.api.tweedekamer.person.dto.PersonDto
-import nl.parlio.api.tweedekamer.person.dto.PersonSyncFeedUpdateDto
-import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryDto
-import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryKeyDto
-import nl.parlio.api.tweedekamer.shared.types.changes.StringChangeEntryDto
+import nl.parlio.api.tweedekamer.person.root.dto.PersonChangeEventDto
+import nl.parlio.api.tweedekamer.person.root.dto.PersonDto
+import nl.parlio.api.tweedekamer.person.root.dto.PersonSyncFeedUpdateDto
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventEntryTable.CHANGE_EVENT_ENTRY
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventTable.CHANGE_EVENT
 import nl.parlio.tweedekamer.gen.jooq.tables.PersonTable.PERSON
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Service
 class PersonServiceImpl(
     private val dsl: DSLContext,
     private val conversionService: ConversionService,
-    private val objectMapper: ObjectMapper
+    private val changeEventFactory: ChangeEventFactory
 ) : PersonService {
 
     override fun findPeople(ids: Set<Long>): Map<Long, PersonDto> {
@@ -78,18 +77,10 @@ class PersonServiceImpl(
                 .where(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID.`in`(changeEventIds))
                 .fetchGroups(CHANGE_EVENT_ENTRY.CHANGE_EVENT_ID, CHANGE_EVENT_ENTRY.recordType)
 
-        return events.mapValues { (_, changeEntries) -> changeEntries.map(::mapChangeEntry) }
-    }
-
-    fun mapChangeEntry(eventEntry: QChangeEventEntryRecord): ChangeEntryDto {
-        // TODO Improve this method
-        val key = conversionService.convert(eventEntry.key, ChangeEntryKeyDto::class.java)!!
-
-        val dataTree = objectMapper.readTree(eventEntry.data)
-        val t = dataTree.get("t")
-        if (t == null || !t.isTextual) {
-            TODO("Incorrect t: $dataTree")
+        return events.mapValues { (_, changeEntries) ->
+            changeEntries.map(changeEventFactory::decipherChangeRecord)
         }
+    }
 
         val entry: ChangeEntryDto =
             when (t.textValue()) {

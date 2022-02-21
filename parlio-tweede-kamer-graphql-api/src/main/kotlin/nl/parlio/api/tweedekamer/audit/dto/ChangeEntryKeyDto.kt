@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.shared.types.changes
+package nl.parlio.api.tweedekamer.audit.dto
 
 enum class ChangeEntryKeyDto {
     PERSON_SLUG,

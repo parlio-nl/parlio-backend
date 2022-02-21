@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.shared.types.changes
+package nl.parlio.api.tweedekamer.audit.dto
 
 sealed interface ChangeEntryDto {
     val key: ChangeEntryKeyDto

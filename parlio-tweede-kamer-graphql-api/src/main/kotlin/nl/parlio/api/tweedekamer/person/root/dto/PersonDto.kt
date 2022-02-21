@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.person.dto
+package nl.parlio.api.tweedekamer.person.root.dto
 
 data class PersonDto(
     val id: Long,

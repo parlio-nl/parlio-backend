@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.person.graphql
+package nl.parlio.api.tweedekamer.person.root.graphql
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsData

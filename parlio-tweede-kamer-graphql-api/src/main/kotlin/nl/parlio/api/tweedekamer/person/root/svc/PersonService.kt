@@ -1,8 +1,8 @@
-package nl.parlio.api.tweedekamer.person.svc
+package nl.parlio.api.tweedekamer.person.root.svc
 
-import nl.parlio.api.tweedekamer.person.dto.PersonChangeEventDto
-import nl.parlio.api.tweedekamer.person.dto.PersonDto
-import nl.parlio.api.tweedekamer.shared.types.changes.ChangeEntryDto
+import nl.parlio.api.tweedekamer.audit.dto.ChangeEntryDto
+import nl.parlio.api.tweedekamer.person.root.dto.PersonChangeEventDto
+import nl.parlio.api.tweedekamer.person.root.dto.PersonDto
 
 interface PersonService {
 

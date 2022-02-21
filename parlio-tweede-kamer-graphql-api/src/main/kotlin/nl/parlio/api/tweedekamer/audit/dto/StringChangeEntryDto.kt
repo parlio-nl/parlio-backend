@@ -1,4 +1,4 @@
-package nl.parlio.api.tweedekamer.shared.types.changes
+package nl.parlio.api.tweedekamer.audit.dto
 
 data class StringChangeEntryDto(
     val oldValue: String?,
