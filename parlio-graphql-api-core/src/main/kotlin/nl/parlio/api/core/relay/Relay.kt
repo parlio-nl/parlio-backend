@@ -15,7 +15,7 @@ object Relay {
 
     @JvmStatic
     fun toGlobalId(globalId: GlobalId): String {
-        return B64_ENCODER.encodeToString("${globalId.type}:${globalId.id}".toByteArray(StandardCharsets.UTF_8))
+        return toGlobalId(globalId.type, globalId.id)
     }
 
     @JvmStatic
