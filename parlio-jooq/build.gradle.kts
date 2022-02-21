@@ -14,6 +14,7 @@ dependencies {
     implementation("org.jooq:jooq-codegen:$jooqVersion")
 }
 
+// Disable Spring tasks, we need the Spring Gradle plugin dependency because of jOOQ version management
 tasks.filter {
     setOf("bootJar", "bootJarMainClassName", "bootRunMainClassName", "bootRun").contains(it.name)
 }.onEach {
