@@ -20,6 +20,9 @@ idea {
     }
 }
 
+val integrationTestImplementation: Configuration by configurations.creating
+integrationTestImplementation.extendsFrom(configurations.implementation.get())
+
 dependencies {
     implementation(project(":parlio-graphql-api-core"))
     implementation(libs.caffeine)
@@ -43,15 +46,11 @@ dependencies {
     jooqGenerator(libs.postgresql.driver)
     jooqGenerator(project(":parlio-jooq"))
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(platform(libs.testcontainers.bom))
-    testImplementation(libs.testcontainers.junit.jupiter)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.jfrunit.core)
-}
-
-tasks.withType<Test> {
-    jvmArgs = listOf("-Dorg.jooq.no-logo=true")
-    useJUnitPlatform()
+    integrationTestImplementation(libs.spring.boot.starter.test)
+    integrationTestImplementation(platform(libs.testcontainers.bom))
+    integrationTestImplementation(libs.testcontainers.junit.jupiter)
+    integrationTestImplementation(libs.testcontainers.postgresql)
+//    testImplementation(libs.jfrunit.core)
 }
 
 tasks {
@@ -137,5 +136,37 @@ val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
 spotless {
     java {
         targetExclude("/src/main/jooq/")
+    }
+}
+
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+        val integrationTest by registering(JvmTestSuite::class) {
+            useJUnitJupiter()
+            testType.set(TestSuiteType.INTEGRATION_TEST)
+            dependencies {
+                implementation(project)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks {
+    named("check") {
+        dependsOn(testing.suites.named("integrationTest"))
+    }
+
+    withType<Test> {
+        systemProperty("org.jooq.no-logo", "true")
     }
 }
