@@ -9,9 +9,16 @@ plugins {
     alias(libs.plugins.diffplug.spotless)
     alias(libs.plugins.dgs.codegen) // Must come after Kotlin (https://github.com/Netflix/dgs-codegen/issues/171)
     java
+    idea
 }
 
 group = "nl.parlio.api.stembureau"
+
+idea {
+    module {
+        generatedSourceDirs.plusAssign(file("src/main/jooq"))
+    }
+}
 
 dependencies {
     implementation(project(":parlio-graphql-api-core"))
@@ -94,17 +101,18 @@ jooq {
                         ))
                     }
                     generate.apply {
-                        isDeprecated = false
-                        isRecords = true
-                        isPojos = false
-                        isImmutablePojos = false
                         isComments = false
-                        isIndexes = false
+                        isDeprecated = false
+                        isFluentSetters = false
                         isGlobalCatalogReferences = false
                         isGlobalSchemaReferences = false
-                        isKeys = false
-                        isFluentSetters = false
                         isGlobalTableReferences = false
+                        isImmutablePojos = false
+                        isIndexes = false
+                        isKeys = false
+                        isPojos = false
+                        isRecords = true
+                        isSequences = false
                     }
                     target.apply {
                         packageName = "nl.parlio.tweedekamer.gen.jooq"
@@ -118,10 +126,10 @@ jooq {
 }
 
 val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
-    enabled = System.getProperty("CI") != null
-    inputs.files(fileTree("src/main/resources/db/migration/postgresql"),
-        fileTree("src/main/jooq"), file("**/build.gradle.kts"))
-        .withPropertyName("migrations")
+    enabled = System.getProperty("CI") == null
+    inputs.files(fileTree("src/main/resources/db/migration/postgresql").apply {
+        include("*.sql")
+    }).withPropertyName("migrations")
         .withPathSensitivity(PathSensitivity.RELATIVE)
     allInputsDeclared.set(true)
 }
