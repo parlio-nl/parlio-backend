@@ -1,12 +1,16 @@
 package nl.parlio.api.tweedekamer.person.root.svc
 
 import nl.parlio.api.core.ext.convertList
+import nl.parlio.api.core.relay.connection.RelayConnectionArgs
 import nl.parlio.api.tweedekamer.audit.ChangeEventFactory
 import nl.parlio.api.tweedekamer.audit.dto.ChangeEntryDto
 import nl.parlio.api.tweedekamer.person.PersonChangeOperation
 import nl.parlio.api.tweedekamer.person.root.dto.PersonChangeEventDto
 import nl.parlio.api.tweedekamer.person.root.dto.PersonDto
 import nl.parlio.api.tweedekamer.person.root.dto.PersonSyncFeedUpdateDto
+import nl.parlio.api.tweedekamer.shared.utils.RelayConnectionOoq.relayLimit
+import nl.parlio.api.tweedekamer.shared.utils.RelayConnectionOoq.relayOrderBy
+import nl.parlio.api.tweedekamer.shared.utils.RelayConnectionOoq.relayWhere
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventEntryTable.CHANGE_EVENT_ENTRY
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventTable.CHANGE_EVENT
 import nl.parlio.tweedekamer.gen.jooq.tables.PersonTable.PERSON
@@ -82,16 +86,20 @@ class PersonServiceImpl(
         }
     }
 
-        val entry: ChangeEntryDto =
-            when (t.textValue()) {
-                "s" ->
-                    StringChangeEntryDto(
-                        dataTree.get("b").textValue(),
-                        dataTree.get("a").textValue(),
-                        key
-                    )
-                else -> TODO()
-            }
-        return entry
+    override fun findPeopleByConnection(args: RelayConnectionArgs<Long>): List<PersonDto> {
+        val people =
+            dsl.select(
+                    PERSON.PERSON_ID,
+                    PERSON.SLUG,
+                    PERSON.FAMILY_NAME,
+                    PERSON.NAME_INITIALS,
+                    PERSON.FIRST_NAME
+                )
+                .from(PERSON)
+                .where(relayWhere(PERSON.PERSON_ID, args))
+                .orderBy(relayOrderBy(PERSON.PERSON_ID, args))
+                .limit(relayLimit(args))
+                .fetchInto(PERSON.recordType)
+        return conversionService.convertList(people)
     }
 }

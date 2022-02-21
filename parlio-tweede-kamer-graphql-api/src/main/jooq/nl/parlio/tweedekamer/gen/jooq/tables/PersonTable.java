@@ -11,6 +11,7 @@ import nl.parlio.tweedekamer.gen.jooq.PublicTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.records.QPersonRecord;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Row6;
 import org.jooq.Schema;
@@ -48,7 +49,7 @@ public class PersonTable extends TableImpl<QPersonRecord> {
     /**
      * The column <code>public.person.person_id</code>.
      */
-    public final TableField<QPersonRecord, Long> PERSON_ID = createField(DSL.name("person_id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<QPersonRecord, Long> PERSON_ID = createField(DSL.name("person_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.person.slug</code>.
@@ -107,6 +108,11 @@ public class PersonTable extends TableImpl<QPersonRecord> {
     @Override
     public Schema getSchema() {
         return PublicTable.PUBLIC;
+    }
+
+    @Override
+    public Identity<QPersonRecord, Long> getIdentity() {
+        return (Identity<QPersonRecord, Long>) super.getIdentity();
     }
 
     @Override

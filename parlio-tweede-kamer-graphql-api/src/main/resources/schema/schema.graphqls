@@ -1,8 +1,7 @@
 type Query {
     echo(msg: String!): String!
     people(after: String, before: String, first: Int, last: Int): PersonConnection!
-    allPeople: PersonConnection! @deprecated
-    rawPerson(rawId: String!): Person
+    rawPerson(rawId: String!): Person # TODO Remove
 }
 
 """
@@ -55,7 +54,6 @@ type Person implements Node @connection {
     firstName: String!
     familyName: String!
     nameInitials: String!
-    #    dateOfBirth: String!
     changeHistory: [PersonChangeEvent!]!
 }
 

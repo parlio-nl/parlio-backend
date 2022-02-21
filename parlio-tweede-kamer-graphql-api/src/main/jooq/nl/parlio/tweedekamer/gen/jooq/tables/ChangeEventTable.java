@@ -12,6 +12,7 @@ import nl.parlio.tweedekamer.gen.jooq.PublicTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.records.QChangeEventRecord;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Row5;
 import org.jooq.Schema;
@@ -49,7 +50,7 @@ public class ChangeEventTable extends TableImpl<QChangeEventRecord> {
     /**
      * The column <code>public.change_event.change_event_id</code>.
      */
-    public final TableField<QChangeEventRecord, Long> CHANGE_EVENT_ID = createField(DSL.name("change_event_id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<QChangeEventRecord, Long> CHANGE_EVENT_ID = createField(DSL.name("change_event_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.change_event.operation_name</code>.
@@ -64,12 +65,12 @@ public class ChangeEventTable extends TableImpl<QChangeEventRecord> {
     /**
      * The column <code>public.change_event.model</code>.
      */
-    public final TableField<QChangeEventRecord, String> MODEL = createField(DSL.name("model"), SQLDataType.CLOB, this, "");
+    public final TableField<QChangeEventRecord, String> MODEL = createField(DSL.name("model"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>public.change_event.ref</code>.
      */
-    public final TableField<QChangeEventRecord, Long> REF = createField(DSL.name("ref"), SQLDataType.BIGINT, this, "");
+    public final TableField<QChangeEventRecord, Long> REF = createField(DSL.name("ref"), SQLDataType.BIGINT.nullable(false), this, "");
 
     private ChangeEventTable(Name alias, Table<QChangeEventRecord> aliased) {
         this(alias, aliased, null);
@@ -103,6 +104,11 @@ public class ChangeEventTable extends TableImpl<QChangeEventRecord> {
     @Override
     public Schema getSchema() {
         return PublicTable.PUBLIC;
+    }
+
+    @Override
+    public Identity<QChangeEventRecord, Long> getIdentity() {
+        return (Identity<QChangeEventRecord, Long>) super.getIdentity();
     }
 
     @Override

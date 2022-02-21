@@ -11,6 +11,7 @@ import nl.parlio.tweedekamer.gen.jooq.PublicTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.records.QChangeEventEntryRecord;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Row4;
 import org.jooq.Schema;
@@ -48,7 +49,7 @@ public class ChangeEventEntryTable extends TableImpl<QChangeEventEntryRecord> {
     /**
      * The column <code>public.change_event_entry.change_event_entry_id</code>.
      */
-    public final TableField<QChangeEventEntryRecord, Long> CHANGE_EVENT_ENTRY_ID = createField(DSL.name("change_event_entry_id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<QChangeEventEntryRecord, Long> CHANGE_EVENT_ENTRY_ID = createField(DSL.name("change_event_entry_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.change_event_entry.change_event_id</code>.
@@ -97,6 +98,11 @@ public class ChangeEventEntryTable extends TableImpl<QChangeEventEntryRecord> {
     @Override
     public Schema getSchema() {
         return PublicTable.PUBLIC;
+    }
+
+    @Override
+    public Identity<QChangeEventEntryRecord, Long> getIdentity() {
+        return (Identity<QChangeEventEntryRecord, Long>) super.getIdentity();
     }
 
     @Override

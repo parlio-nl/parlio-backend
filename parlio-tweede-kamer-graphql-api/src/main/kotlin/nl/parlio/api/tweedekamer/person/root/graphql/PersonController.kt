@@ -6,28 +6,28 @@ import com.netflix.graphql.dgs.DgsDataFetchingEnvironment
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
 import graphql.relay.Connection
-import graphql.relay.DefaultConnection
-import graphql.relay.DefaultPageInfo
 import java.util.concurrent.CompletableFuture
+import nl.parlio.api.core.ext.convertExact
 import nl.parlio.api.core.ext.getMappedBatchLoader
 import nl.parlio.api.core.relay.Relay
-import nl.parlio.api.tweedekamer.person.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
-import nl.parlio.api.tweedekamer.person.graphql.dataloader.ChangeEventByPersonIdDataLoader
-import nl.parlio.api.tweedekamer.person.graphql.dataloader.PersonByIdDataLoader
+import nl.parlio.api.core.relay.connection.RelayConnection
+import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
+import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.ChangeEventByPersonIdDataLoader
+import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.PersonByIdDataLoader
+import nl.parlio.api.tweedekamer.person.root.svc.PersonService
 import nl.parlio.tweedekamer.gen.graphql.DgsConstants
 import nl.parlio.tweedekamer.gen.graphql.types.ChangeEntry
 import nl.parlio.tweedekamer.gen.graphql.types.ChangeEvent
 import nl.parlio.tweedekamer.gen.graphql.types.Person
 import nl.parlio.tweedekamer.gen.graphql.types.PersonChangeEvent
 import org.dataloader.Try
+import org.springframework.core.convert.ConversionService
 
 @DgsComponent
-class PersonController {
-
-    @DgsQuery
-    fun allPeople(): Connection<Person> {
-        return DefaultConnection(emptyList(), DefaultPageInfo(null, null, false, false))
-    }
+class PersonController(
+    private val personService: PersonService,
+    private val conversionService: ConversionService
+) {
 
     @DgsQuery
     fun rawPerson(
@@ -36,6 +36,20 @@ class PersonController {
     ): CompletableFuture<Try<Person>> {
         val dl = dfe.getMappedBatchLoader<Long, Try<Person>, PersonByIdDataLoader>()
         return dl.load(rawId.toLong())
+    }
+
+    @DgsQuery(field = DgsConstants.QUERY.People)
+    fun people(dfe: DgsDataFetchingEnvironment): CompletableFuture<Connection<Person>> {
+        val connArgs =
+            RelayConnection.extractConnectionArguments(dfe, Relay.LongCursor::assertAndExtract)
+        return CompletableFuture.supplyAsync {
+            val findPeople = personService.findPeopleByConnection(connArgs)
+            return@supplyAsync RelayConnection.createConnectionOnEach(
+                findPeople,
+                { Relay.LongCursor.toCursor(it.id) },
+                { conversionService.convertExact<Person>(it) }
+            )
+        }
     }
 
     @DgsData(parentType = DgsConstants.PERSON.TYPE_NAME)
