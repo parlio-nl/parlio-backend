@@ -10,6 +10,7 @@ import java.util.List;
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventEntryTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.ChangeEventTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.FlywaySchemaHistoryTable;
+import nl.parlio.tweedekamer.gen.jooq.tables.PersonGiftTable;
 import nl.parlio.tweedekamer.gen.jooq.tables.PersonTable;
 
 import org.jooq.Catalog;

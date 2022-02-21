@@ -55,6 +55,7 @@ type Person implements Node @connection {
     familyName: String!
     nameInitials: String!
     changeHistory: [PersonChangeEvent!]!
+    gifts(after: String, before: String, first: Int, last: Int): PersonGiftConnection!
 }
 
 interface PersonChangeEvent implements ChangeEvent & Node {
@@ -73,4 +74,10 @@ type PersonSyncFeedUpdateEvent implements PersonChangeEvent & ChangeEvent & Node
 
 type PoliticalParty implements Node @connection {
     id: ID!
+}
+
+type PersonGift implements Node @connection {
+    id: ID!
+    description: String
+    date: Date
 }
