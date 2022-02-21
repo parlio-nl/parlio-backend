@@ -129,7 +129,7 @@ jooq {
 }
 
 val jooqTask = tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
-    enabled = System.getProperty("CI") == null
+    enabled = System.getenv("CI") == null
     inputs.files(fileTree("src/main/resources/db/migration/postgresql").apply {
         include("*.sql")
     }).withPropertyName("migrations")
