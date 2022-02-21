@@ -2,6 +2,8 @@ package nl.parlio.api.core.relay
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64
+import java.util.Objects
+import nl.parlio.api.core.relay.cursor.RelayCursor
 
 object Relay {
 
@@ -47,4 +49,74 @@ object Relay {
         return globalId.id
     }
 
+    private object Cursor {
+        @JvmStatic
+        fun <T> toCursor(cursorType: String, cursorData: T, cursorFactory: (T) -> String): String {
+            val cursorBytes =
+                "$cursorType:${cursorFactory(cursorData)}".toByteArray(StandardCharsets.UTF_8)
+            return B64_ENCODER.encodeToString(cursorBytes)
+        }
+
+        @JvmStatic
+        fun <T> toCursor(relayCursor: RelayCursor<T>): String {
+            return toCursor(relayCursor.cursorType, relayCursor.cursorData, Objects::toString)
+        }
+
+        @JvmStatic
+        fun <T> toCursorOrNull(
+            cursorString: String,
+            cursorFactory: (String) -> T?
+        ): RelayCursor<T>? {
+            val decoded: ByteArray
+            try {
+                decoded = B64_DECODER.decode(cursorString)
+            } catch (e: IllegalArgumentException) {
+                return null
+            }
+            val decodedStr = String(decoded, StandardCharsets.UTF_8)
+            val split = decodedStr.split(':')
+            if (split.size != 2) {
+                return null
+            }
+            val cursorData = cursorFactory(split[1]) ?: return null
+            return RelayCursor(split[0], cursorData)
+        }
+
+        @JvmStatic
+        fun <T> toCursor(cursorString: String, cursorFactory: (String) -> T?): RelayCursor<T> {
+            return toCursorOrNull(cursorString, cursorFactory)
+                ?: throw RuntimeException("Invalid cursor: $cursorString")
+        }
+
+        @JvmStatic
+        fun <T> assertAndExtractCursorData(
+            cursorString: String,
+            expectedType: String,
+            cursorFactory: (String) -> T?
+        ): T {
+            val relayCursor = toCursor(cursorString, cursorFactory)
+            assert(relayCursor.cursorType == expectedType) { "Invalid cursor: $cursorString" }
+            return relayCursor.cursorData
+        }
+    }
+
+    object LongCursor {
+        private const val LONG_CURSOR_PREFIX = "L"
+
+        @JvmStatic
+        fun assertAndExtract(
+            cursorString: String,
+        ): Long {
+            return Cursor.assertAndExtractCursorData(
+                cursorString,
+                LONG_CURSOR_PREFIX,
+                String::toLongOrNull
+            )
+        }
+
+        @JvmStatic
+        fun toCursor(cursorData: Long): String {
+            return Cursor.toCursor(LONG_CURSOR_PREFIX, cursorData, Long::toString)
+        }
+    }
 }
