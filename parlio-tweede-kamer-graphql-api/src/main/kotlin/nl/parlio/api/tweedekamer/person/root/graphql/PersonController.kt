@@ -11,14 +11,13 @@ import nl.parlio.api.core.ext.convertExact
 import nl.parlio.api.core.ext.getMappedBatchLoader
 import nl.parlio.api.core.relay.Relay
 import nl.parlio.api.core.relay.connection.RelayConnection
-import nl.parlio.api.tweedekamer.audit.graphql.dataloader.ChangeEntryByChangeEventIdDataLoader
 import nl.parlio.api.tweedekamer.audit.graphql.dataloader.ChangeEventBySearchCompositeDataLoader
 import nl.parlio.api.tweedekamer.audit.types.ChangeEventModel
 import nl.parlio.api.tweedekamer.audit.types.ChangeEventSearchComposite
 import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.PersonByIdDataLoader
+import nl.parlio.api.tweedekamer.person.root.graphql.dataloader.PersonBySlugDataLoader
 import nl.parlio.api.tweedekamer.person.root.svc.PersonService
 import nl.parlio.tweedekamer.gen.graphql.DgsConstants
-import nl.parlio.tweedekamer.gen.graphql.types.ChangeEntry
 import nl.parlio.tweedekamer.gen.graphql.types.ChangeEvent
 import nl.parlio.tweedekamer.gen.graphql.types.Person
 import nl.parlio.tweedekamer.gen.graphql.types.PersonChangeEvent
@@ -90,16 +89,6 @@ class PersonController(
                 List<ChangeEvent>,
                 ChangeEventBySearchCompositeDataLoader>()
         return dl.load(ChangeEventSearchComposite(ChangeEventModel.PERSON, personId))
-    }
-
-    @DgsData(parentType = DgsConstants.CHANGEEVENT.TYPE_NAME)
-    fun log(dfe: DgsDataFetchingEnvironment): CompletableFuture<List<ChangeEntry>> {
-        val parentGlobalId = dfe.getSource<ChangeEvent>().id
-        val id = Relay.assertAndExtractId(parentGlobalId, "ChangeEvent")
-        val dl =
-            dfe.getMappedBatchLoader<
-                Long, List<ChangeEntry>, ChangeEntryByChangeEventIdDataLoader>()
-        return dl.load(id)
     }
 
     @DgsData(parentType = DgsConstants.PERSONCHANGEEVENT.TYPE_NAME)
