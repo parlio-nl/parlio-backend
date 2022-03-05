@@ -63,6 +63,23 @@ class PersonController(
         }
     }
 
+    @DgsData(parentType = DgsConstants.PERSON.TYPE_NAME, field = DgsConstants.PERSON.DisplayName)
+    fun personDisplayName(dfe: DgsDataFetchingEnvironment): String? {
+        val person = dfe.getSource<Person>()
+        var displayName: String? = null
+        if (person.firstName != null) {
+            displayName = person.firstName
+        }
+        if (person.familyName != null) {
+            if (displayName == null) {
+                displayName = person.familyName
+            } else {
+                displayName += (" " + person.familyName)
+            }
+        }
+        return displayName
+    }
+
     @DgsData(parentType = DgsConstants.PERSON.TYPE_NAME)
     fun changeHistory(dfe: DgsDataFetchingEnvironment): CompletableFuture<List<ChangeEvent>> {
         val parentGlobalId = dfe.getSource<Person>().id
