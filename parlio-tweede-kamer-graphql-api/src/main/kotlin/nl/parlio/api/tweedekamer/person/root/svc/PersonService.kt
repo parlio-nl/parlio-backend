@@ -7,5 +7,7 @@ interface PersonService {
 
     fun findPeople(ids: Set<Long>): Map<Long, PersonDto>
 
+    fun findPeopleBySlugs(slugs: Set<String>): Map<String, PersonDto>
+
     fun findPeopleByConnection(args: RelayConnectionArgs<Long>): List<PersonDto>
 }

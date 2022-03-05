@@ -2,6 +2,7 @@ type Query {
     echo(msg: String!): String!
     people(after: String, before: String, first: Int, last: Int): PersonConnection!
     rawPerson(rawId: String!): Person # TODO Remove
+    person(slug: String!): Person
 }
 
 """

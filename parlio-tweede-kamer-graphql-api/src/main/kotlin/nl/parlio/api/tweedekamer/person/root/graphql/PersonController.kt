@@ -40,6 +40,15 @@ class PersonController(
         return dl.load(rawId.toLong())
     }
 
+    @DgsQuery(field = DgsConstants.QUERY.Person)
+    fun person(
+        @InputArgument("slug") slug: String,
+        dfe: DgsDataFetchingEnvironment
+    ): CompletableFuture<Try<Person>> {
+        val dl = dfe.getMappedBatchLoader<String, Try<Person>, PersonBySlugDataLoader>()
+        return dl.load(slug)
+    }
+
     @DgsQuery(field = DgsConstants.QUERY.People)
     fun people(dfe: DgsDataFetchingEnvironment): CompletableFuture<Connection<Person>> {
         val connArgs =
