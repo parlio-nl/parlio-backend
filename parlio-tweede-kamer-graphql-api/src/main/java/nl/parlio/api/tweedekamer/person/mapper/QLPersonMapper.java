@@ -15,7 +15,7 @@ public interface QLPersonMapper extends Converter<PersonDto, Person> {
   @Mapping(target = "trips", ignore = true)
   @Mapping(
       target = "id",
-      expression = "java(nl.parlio.api.core.relay.Relay.toGlobalId(\"User\", s.getId()))")
+      expression = "java(nl.parlio.api.core.relay.Relay.toGlobalId(\"Person\", s.getId()))")
   @Mapping(source = "initials", target = "nameInitials")
   Person convert(PersonDto s);
 }
