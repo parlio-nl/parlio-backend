@@ -45,7 +45,7 @@ object Relay {
     @JvmStatic
     fun assertAndExtractId(stringId: String, expectedType: String): Long {
         val globalId = toGlobalId(stringId)
-        assert(globalId.type == expectedType) { "Invalid identifier: $stringId" }
+        check(globalId.type == expectedType) { "Invalid identifier: $stringId" }
         return globalId.id
     }
 

@@ -73,7 +73,7 @@ public class RelayUtilTests {
     assertThatThrownBy(() -> Relay.assertAndExtractId(globalId, expectedType))
         .hasMessage("Invalid identifier: " + globalId)
         .hasNoCause()
-        .isExactlyInstanceOf(AssertionError.class);
+        .isExactlyInstanceOf(IllegalStateException.class);
   }
 
   private void satisfiesGlobalId(GlobalId out, String expectedType, long expectedId) {
