@@ -45,7 +45,7 @@ interface ChangeEvent implements Node {
     ^[A-Za-z0-9](?:[A-Za-z0-9]|[A-Za-z0-9_][A-Za-z0-9])*(?:\.[A-Za-z0-9](?:[A-Za-z0-9]|[A-Za-z0-9_][A-Za-z0-9])*)* (DOLLAR SIGN)
     """
     op: String!
-    log: [ChangeEntry!]!
+    changes: [ChangeEntry!]!
 }
 
 type Person implements Node @connection {
@@ -63,14 +63,14 @@ interface PersonChangeEvent implements ChangeEvent & Node {
     id: ID!
     person: Person!
     op: String!
-    log: [ChangeEntry!]!
+    changes: [ChangeEntry!]!
 }
 
 type PersonSyncFeedUpdateEvent implements PersonChangeEvent & ChangeEvent & Node {
     id: ID!
     person: Person!
     op: String!
-    log: [ChangeEntry!]!
+    changes: [ChangeEntry!]!
 }
 
 type PoliticalParty implements Node @connection {
@@ -87,7 +87,7 @@ type PersonGift implements Node @connection {
 type GenericChangeEvent implements ChangeEvent & Node {
     id: ID!
     op: String!
-    log: [ChangeEntry!]!
+    changes: [ChangeEntry!]!
 }
 
 type PersonTrip implements Node @connection {
