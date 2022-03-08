@@ -22,21 +22,15 @@ class PersonTripServiceImpl(
         args: RelayConnectionArgs<Long>
     ): List<PersonTripDto> {
         val trips =
-            dsl.select(
-                    PERSON_TRIP.PERSON_TRIP_ID,
-                    PERSON_TRIP.START_DATE,
-                    PERSON_TRIP.DESTINATION,
-                    PERSON_TRIP.PURPOSE,
-                    PERSON_TRIP.END_DATE,
-                    PERSON_TRIP.PAID_BY
-                )
-                .from(PERSON_TRIP)
-                .where(
-                    relayWhere(PERSON_TRIP.PERSON_TRIP_ID, PERSON_TRIP.PERSON_ID, personId, args)
-                )
-                .orderBy(relayOrderBy(PERSON_TRIP.PERSON_TRIP_ID, args))
-                .limit(relayLimit(args))
-                .fetchInto(PERSON_TRIP.recordType)
+            with(PERSON_TRIP) {
+                dsl.select(PERSON_TRIP_ID, START_DATE, DESTINATION, PURPOSE, END_DATE, PAID_BY)
+                    .from(this)
+                    .where(relayWhere(PERSON_TRIP_ID, PERSON_ID, personId, args))
+                    .orderBy(relayOrderBy(PERSON_TRIP_ID, args))
+                    .limit(relayLimit(args))
+                    .fetchInto(recordType)
+            }
+
         return conversionService.convertList(trips)
     }
 }

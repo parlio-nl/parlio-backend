@@ -22,13 +22,13 @@ class PersonGiftServiceImpl(
         args: RelayConnectionArgs<Long>
     ): List<PersonGiftDto> {
         val gifts =
-            dsl.selectFrom(PERSON_GIFT)
-                .where(
-                    relayWhere(PERSON_GIFT.PERSON_GIFT_ID, PERSON_GIFT.PERSON_ID, personId, args)
-                )
-                .orderBy(relayOrderBy(PERSON_GIFT.PERSON_GIFT_ID, args))
-                .limit(relayLimit(args))
-                .fetchInto(PERSON_GIFT.recordType)
+            with(PERSON_GIFT) {
+                dsl.selectFrom(this)
+                    .where(relayWhere(PERSON_GIFT_ID, PERSON_ID, personId, args))
+                    .orderBy(relayOrderBy(PERSON_GIFT_ID, args))
+                    .limit(relayLimit(args))
+                    .fetchInto(recordType)
+            }
         return conversionService.convertList(gifts)
     }
 }

@@ -1,6 +1,5 @@
 package nl.parlio.api.tweedekamer.person.root.svc
 
-import nl.parlio.api.core.ext.convertExact
 import nl.parlio.api.core.ext.convertList
 import nl.parlio.api.core.relay.connection.RelayConnectionArgs
 import nl.parlio.api.tweedekamer.person.root.dto.PersonDto
@@ -23,41 +22,36 @@ class PersonServiceImpl(
 
     override fun findPeople(ids: Set<Long>): Map<Long, PersonDto> {
         val people = findPeopleBatched(PERSON.PERSON_ID.`in`(ids))
-        return people.map { conversionService.convertExact<PersonDto>(it) }.associateBy { it.id }
+        return conversionService.convertList<QPersonRecord, PersonDto>(people).associateBy { it.id }
     }
 
     override fun findPeopleBySlugs(slugs: Set<String>): Map<String, PersonDto> {
         val people = findPeopleBatched(PERSON.SLUG.`in`(slugs))
-        return people.map { conversionService.convertExact<PersonDto>(it) }.associateBy { it.slug }
+        return conversionService.convertList<QPersonRecord, PersonDto>(people).associateBy {
+            it.slug
+        }
     }
 
     override fun findPeopleByConnection(args: RelayConnectionArgs<Long>): List<PersonDto> {
         val people =
-            dsl.select(
-                    PERSON.PERSON_ID,
-                    PERSON.SLUG,
-                    PERSON.FAMILY_NAME,
-                    PERSON.NAME_INITIALS,
-                    PERSON.FIRST_NAME
-                )
-                .from(PERSON)
-                .where(relayWhere(PERSON.PERSON_ID, args))
-                .orderBy(relayOrderBy(PERSON.PERSON_ID, args))
-                .limit(relayLimit(args))
-                .fetchInto(PERSON.recordType)
+            with(PERSON) {
+                dsl.select(PERSON_ID, SLUG, FAMILY_NAME, NAME_INITIALS, FIRST_NAME)
+                    .from(PERSON)
+                    .where(relayWhere(PERSON_ID, args))
+                    .orderBy(relayOrderBy(PERSON_ID, args))
+                    .limit(relayLimit(args))
+                    .fetchInto(PERSON.recordType)
+            }
+
         return conversionService.convertList(people)
     }
 
     private fun findPeopleBatched(whereCondition: Condition): Result<QPersonRecord> {
-        return dsl.select(
-                PERSON.PERSON_ID,
-                PERSON.SLUG,
-                PERSON.FAMILY_NAME,
-                PERSON.NAME_INITIALS,
-                PERSON.FIRST_NAME
-            )
-            .from(PERSON)
-            .where(whereCondition)
-            .fetchInto(PERSON)
+        return with(PERSON) {
+            dsl.select(PERSON_ID, SLUG, FAMILY_NAME, NAME_INITIALS, FIRST_NAME)
+                .from(PERSON)
+                .where(whereCondition)
+                .fetchInto(PERSON)
+        }
     }
 }
