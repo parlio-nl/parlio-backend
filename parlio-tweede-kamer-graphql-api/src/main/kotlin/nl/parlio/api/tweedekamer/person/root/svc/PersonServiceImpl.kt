@@ -1,5 +1,6 @@
 package nl.parlio.api.tweedekamer.person.root.svc
 
+import nl.parlio.api.core.ext.convertAndAssociateBy
 import nl.parlio.api.core.ext.convertList
 import nl.parlio.api.core.relay.connection.RelayConnectionArgs
 import nl.parlio.api.tweedekamer.person.root.dto.PersonDto
@@ -22,14 +23,12 @@ class PersonServiceImpl(
 
     override fun findPeople(ids: Set<Long>): Map<Long, PersonDto> {
         val people = findPeopleBatched(PERSON.PERSON_ID.`in`(ids))
-        return conversionService.convertList<QPersonRecord, PersonDto>(people).associateBy { it.id }
+        return conversionService.convertAndAssociateBy(people) { it.id }
     }
 
     override fun findPeopleBySlugs(slugs: Set<String>): Map<String, PersonDto> {
         val people = findPeopleBatched(PERSON.SLUG.`in`(slugs))
-        return conversionService.convertList<QPersonRecord, PersonDto>(people).associateBy {
-            it.slug
-        }
+        return conversionService.convertAndAssociateBy(people) { it.slug }
     }
 
     override fun findPeopleByConnection(args: RelayConnectionArgs<Long>): List<PersonDto> {

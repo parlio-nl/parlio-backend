@@ -31,3 +31,22 @@ inline fun <I, reified O> ConversionService.convertListOnEach(sourceList: List<I
 inline fun <reified I, reified O> ConversionService.convertList(sourceList: List<I>): List<O> {
     return convertListOnEach(sourceList)
 }
+
+inline fun <reified I, reified O, K> ConversionService.convertAndAssociateBy(
+    sourceList: List<I>,
+    keySelector: (O) -> K
+): Map<K, O> {
+    return convertList<I, O>(sourceList).associateBy(keySelector)
+}
+
+inline fun <K, reified I, reified O> Map<K, I>.convertValues(
+    conversionService: ConversionService
+): Map<K, O> {
+    return this.mapValues { (_, v) -> conversionService.convertExact(v) }
+}
+
+inline fun <K, reified I, reified O> Map<K, List<I>>.convertValuesAsList(
+    conversionService: ConversionService
+): Map<K, List<O>> {
+    return this.mapValues { (_, sourceList) -> conversionService.convertList(sourceList) }
+}
